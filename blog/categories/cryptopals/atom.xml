@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Cryptopals | Nate Michael]]></title>
-  <link href="http://nathanielmichael.github.io/nate.aero/blog/categories/cryptopals/atom.xml" rel="self"/>
-  <link href="http://nathanielmichael.github.io/nate.aero/"/>
-  <updated>2015-01-11T00:01:16-08:00</updated>
-  <id>http://nathanielmichael.github.io/nate.aero/</id>
+  <link href="http://nathanielmichael.github.io/blog/categories/cryptopals/atom.xml" rel="self"/>
+  <link href="http://nathanielmichael.github.io/"/>
+  <updated>2015-01-11T00:18:49-08:00</updated>
+  <id>http://nathanielmichael.github.io/</id>
   <author>
     <name><![CDATA[Nate Michael]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Matasano Crypto Challenges - Set 1 - Challenge 3 - Solved in Go]]></title>
-    <link href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-3-solved-in-go/"/>
+    <link href="http://nathanielmichael.github.io/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-3-solved-in-go/"/>
     <updated>2015-01-10T23:43:47-08:00</updated>
-    <id>http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-3-solved-in-go</id>
+    <id>http://nathanielmichael.github.io/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-3-solved-in-go</id>
     <content type="html"><![CDATA[<p>This is the solution I came up with in Go for <strong>Set 1 / Challenge 3</strong> of the
 <a href="http://cryptopals.com">matasano crypto challenges</a>.</p>
 
@@ -127,9 +127,9 @@ Cooking MC's like a pound of bacon
   
   <entry>
     <title type="html"><![CDATA[Matasano Crypto Challenges - Set 1 - Challenge 2 - Solved in Go]]></title>
-    <link href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go/"/>
+    <link href="http://nathanielmichael.github.io/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go/"/>
     <updated>2015-01-10T21:25:40-08:00</updated>
-    <id>http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go</id>
+    <id>http://nathanielmichael.github.io/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go</id>
     <content type="html"><![CDATA[<p>This is the solution I came up with in Go for <strong>Set 1 / Challenge 2</strong> of the
 <a href="http://cryptopals.com">matasano crypto challenges</a>.</p>
 
@@ -173,9 +173,9 @@ func main() {
   
   <entry>
     <title type="html"><![CDATA[Matasano Crypto Challenges - Set 1 - Challenge 1 - Solved in Go]]></title>
-    <link href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-1-solved-in-go/"/>
+    <link href="http://nathanielmichael.github.io/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-1-solved-in-go/"/>
     <updated>2015-01-10T20:24:27-08:00</updated>
-    <id>http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-1-solved-in-go</id>
+    <id>http://nathanielmichael.github.io/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-1-solved-in-go</id>
     <content type="html"><![CDATA[<p>This is the solution I came up with in Go for <strong>Set 1 / Challenge 1</strong> of the
 <a href="http://cryptopals.com">matasano crypto challenges</a>.</p>
 
