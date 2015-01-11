@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Nate Michael]]></title>
+  <link href="http://nathanielmichael.github.io/nate.aero/atom.xml" rel="self"/>
+  <link href="http://nathanielmichael.github.io/nate.aero/"/>
+  <updated>2015-01-11T00:01:16-08:00</updated>
+  <id>http://nathanielmichael.github.io/nate.aero/</id>
+  <author>
+    <name><![CDATA[Nate Michael]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Matasano Crypto Challenges - Set 1 - Challenge 3 - Solved in Go]]></title>
+    <link href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-3-solved-in-go/"/>
+    <updated>2015-01-10T23:43:47-08:00</updated>
+    <id>http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-3-solved-in-go</id>
+    <content type="html"><![CDATA[<p>This is the solution I came up with in Go for <strong>Set 1 / Challenge 3</strong> of the
+<a href="http://cryptopals.com">matasano crypto challenges</a>.</p>
+
+<p>This one was a little more difficult than the previous two, on the off-chance
+that you&rsquo;re reading this post shortly after it was published; I plan to come
+back tomorrow and detail my thought process / how I came to a solution so stay
+tuned for an update.</p>
+
+<p>Code after the break&hellip;</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nx">hex</span> <span class="s">&quot;encoding/hex&quot;</span>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;sort&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">sourceString</span> <span class="o">:=</span> <span class="s">&quot;1b37373331363f78151b7f2b783431333d78397828372d363c78373&quot;</span> <span class="o">+</span>
+</span><span class='line'>                    <span class="s">&quot;e783a393b3736&quot;</span>
+</span><span class='line'>    <span class="nx">sourceHex</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">hex</span><span class="p">.</span><span class="nx">DecodeString</span><span class="p">(</span><span class="nx">sourceString</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// This is an array of every &#39;character&#39; that may be the key used to</span>
+</span><span class='line'>    <span class="c1">// decode the source string</span>
+</span><span class='line'>    <span class="nx">decoderArray</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">94</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// This is the array where we&#39;ll store a &#39;score&#39; for each key used</span>
+</span><span class='line'>    <span class="c1">// in the previous array</span>
+</span><span class='line'>    <span class="nx">scoreArray</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">94</span><span class="p">)</span>
+</span><span class='line'>    <span class="nx">scoreMap</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">string</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">decoderArray</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">finalHex</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">sourceHex</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">finalHex</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">finalHex</span><span class="p">,</span> <span class="nb">byte</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">32</span><span class="p">)</span> <span class="p">^</span> <span class="nx">v</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">finalString</span> <span class="o">:=</span> <span class="nb">string</span><span class="p">(</span><span class="nx">finalHex</span><span class="p">)</span>
+</span><span class='line'>        <span class="nx">scoreArray</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">scoreString</span><span class="p">(</span><span class="nx">finalString</span><span class="p">)</span>
+</span><span class='line'>        <span class="nx">scoreMap</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">finalString</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">sortedScoreArray</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">94</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">copy</span><span class="p">(</span><span class="nx">sortedScoreArray</span><span class="p">,</span> <span class="nx">scoreArray</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">sort</span><span class="p">.</span><span class="nx">Ints</span><span class="p">(</span><span class="nx">sortedScoreArray</span><span class="p">)</span>
+</span><span class='line'>    <span class="nx">sort</span><span class="p">.</span><span class="nx">Sort</span><span class="p">(</span><span class="nx">sort</span><span class="p">.</span><span class="nx">Reverse</span><span class="p">(</span><span class="nx">sort</span><span class="p">.</span><span class="nx">IntSlice</span><span class="p">(</span><span class="nx">sortedScoreArray</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">highestScore</span> <span class="o">:=</span> <span class="nx">sortedScoreArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">decoderIndex</span> <span class="kt">int</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">scoreArray</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="nx">v</span> <span class="o">==</span> <span class="nx">highestScore</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">decoderIndex</span> <span class="p">=</span> <span class="nx">i</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">scoreMap</span><span class="p">[</span><span class="nx">decoderIndex</span><span class="p">])</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">scoreString</span><span class="p">(</span><span class="nx">target</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">score</span> <span class="o">:=</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">target</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">switch</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">case</span> <span class="nb">byte</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="p">&lt;</span> <span class="mh">0x65</span><span class="p">:</span>
+</span><span class='line'>            <span class="nx">score</span> <span class="p">=</span> <span class="nx">score</span> <span class="o">-</span> <span class="mi">1</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">switch</span> <span class="nb">string</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">case</span> <span class="s">&quot;e&quot;</span><span class="p">:</span>
+</span><span class='line'>            <span class="nx">score</span> <span class="p">=</span> <span class="nx">score</span> <span class="o">+</span> <span class="mi">5</span>
+</span><span class='line'>        <span class="k">case</span> <span class="s">&quot;t&quot;</span><span class="p">:</span>
+</span><span class='line'>            <span class="nx">score</span> <span class="p">=</span> <span class="nx">score</span> <span class="o">+</span> <span class="mi">5</span>
+</span><span class='line'>        <span class="k">case</span> <span class="s">&quot;a&quot;</span><span class="p">:</span>
+</span><span class='line'>            <span class="nx">score</span> <span class="p">=</span> <span class="nx">score</span> <span class="o">+</span> <span class="mi">4</span>
+</span><span class='line'>        <span class="k">case</span> <span class="s">&quot;o&quot;</span><span class="p">:</span>
+</span><span class='line'>            <span class="nx">score</span> <span class="p">=</span> <span class="nx">score</span> <span class="o">+</span> <span class="mi">4</span>
+</span><span class='line'>        <span class="k">case</span> <span class="s">&quot;i&quot;</span><span class="p">:</span>
+</span><span class='line'>            <span class="nx">score</span> <span class="p">=</span> <span class="nx">score</span> <span class="o">+</span> <span class="mi">4</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">score</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Running this will output the expected result, like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Pu:~ nate<span class="nv">$ </span>go run Set1Challenge3.go
+</span><span class='line'>Cooking MC<span class="err">&#39;</span>s like a pound of bacon
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://cryptopals.com/sets/1/challenges/3/">http://cryptopals.com/sets/1/challenges/3/</a></p>
+
+<p><a href="http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance">http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance</a></p>
+
+<p><a href="http://en.wikipedia.org/wiki/Letter_frequency">http://en.wikipedia.org/wiki/Letter_frequency</a></p>
+
+<p><a href="http://en.wikipedia.org/wiki/ASCII">http://en.wikipedia.org/wiki/ASCII</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Matasano Crypto Challenges - Set 1 - Challenge 2 - Solved in Go]]></title>
+    <link href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go/"/>
+    <updated>2015-01-10T21:25:40-08:00</updated>
+    <id>http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go</id>
+    <content type="html"><![CDATA[<p>This is the solution I came up with in Go for <strong>Set 1 / Challenge 2</strong> of the
+<a href="http://cryptopals.com">matasano crypto challenges</a>.</p>
+
+<p>Code after the break&hellip;</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nx">hex</span> <span class="s">&quot;encoding/hex&quot;</span>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">source1</span> <span class="o">:=</span> <span class="s">&quot;1c0111001f010100061a024b53535009181c&quot;</span>
+</span><span class='line'>    <span class="nx">source2</span> <span class="o">:=</span> <span class="s">&quot;686974207468652062756c6c277320657965&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">source1Hex</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">hex</span><span class="p">.</span><span class="nx">DecodeString</span><span class="p">(</span><span class="nx">source1</span><span class="p">)</span>
+</span><span class='line'>    <span class="nx">source2Hex</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">hex</span><span class="p">.</span><span class="nx">DecodeString</span><span class="p">(</span><span class="nx">source2</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">finalHex</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">b</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">source1Hex</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">finalHex</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">finalHex</span><span class="p">,</span> <span class="nx">b</span><span class="p">^</span><span class="nx">source2Hex</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">finalHexString</span> <span class="o">:=</span> <span class="nx">hex</span><span class="p">.</span><span class="nx">EncodeToString</span><span class="p">(</span><span class="nx">finalHex</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">finalHexString</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Running this will output the expected result, like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Pu:~ nate<span class="nv">$ </span>go run Set1Challenge2.go
+</span><span class='line'>746865206b696420646f6e277420706c6179
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Matasano Crypto Challenges - Set 1 - Challenge 1 - Solved in Go]]></title>
+    <link href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-1-solved-in-go/"/>
+    <updated>2015-01-10T20:24:27-08:00</updated>
+    <id>http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-1-solved-in-go</id>
+    <content type="html"><![CDATA[<p>This is the solution I came up with in Go for <strong>Set 1 / Challenge 1</strong> of the
+<a href="http://cryptopals.com">matasano crypto challenges</a>.</p>
+
+<p>Code after the break&hellip;</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nx">b64</span> <span class="s">&quot;encoding/base64&quot;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nx">hex</span> <span class="s">&quot;encoding/hex&quot;</span>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">data</span> <span class="o">:=</span> <span class="s">&quot;49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f&quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;69736f6e6f7573206d757368726f6f6d&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">hexData</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">hex</span><span class="p">.</span><span class="nx">DecodeString</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="nx">hexEnc</span> <span class="o">:=</span> <span class="nx">b64</span><span class="p">.</span><span class="nx">StdEncoding</span><span class="p">.</span><span class="nx">EncodeToString</span><span class="p">(</span><span class="nx">hexData</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">hexEnc</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Running this will output the expected result, like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Pu:~ nate<span class="nv">$ </span>go run test.go
+</span><span class='line'>SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2015!]]></title>
+    <link href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/01/2015/"/>
+    <updated>2015-01-01T23:42:59-08:00</updated>
+    <id>http://nathanielmichael.github.io/nate.aero/blog/2015/01/01/2015</id>
+    <content type="html"><![CDATA[<p>Happy new year!</p>
+
+<p>This year marks some great new things in my life, including finally updating
+this blog!</p>
+
+<p>I&rsquo;ll come back and edit this post with more info!</p>
+]]></content>
+  </entry>
+  
+</feed>

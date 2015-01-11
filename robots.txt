@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://nathanielmichael.github.io/nate.aero/sitemap.xml 

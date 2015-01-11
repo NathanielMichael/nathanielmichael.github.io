@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Matasano Crypto Challenges - Set 1 - Challenge 2 - Solved in Go - Nate Michael</title>
+  <meta name="author" content="Nate Michael">
+
+  
+  <meta name="description" content="Matasano Crypto Challenges - Set 1 - Challenge 2 - Solved in Go written January 10, 2015 in cryptopals, go, matasano, programming This is the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Nate Michael" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Matasano Crypto Challenges - Set 1 - Challenge 2 - Solved in Go</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2015-01-10T21:25:40-08:00" pubdate data-updated="true">January 10, 2015</time>
+          
+
+in
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cryptopals/'>cryptopals</a>, <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/matasano/'>matasano</a>, <a class='category' href='/blog/categories/programming/'>programming</a>
+  
+</span>
+
+
+        </div>
+        <p>This is the solution I came up with in Go for <strong>Set 1 / Challenge 2</strong> of the
+<a href="http://cryptopals.com">matasano crypto challenges</a>.</p>
+
+<p>Code after the break&hellip;</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nx">hex</span> <span class="s">&quot;encoding/hex&quot;</span>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">source1</span> <span class="o">:=</span> <span class="s">&quot;1c0111001f010100061a024b53535009181c&quot;</span>
+</span><span class='line'>    <span class="nx">source2</span> <span class="o">:=</span> <span class="s">&quot;686974207468652062756c6c277320657965&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">source1Hex</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">hex</span><span class="p">.</span><span class="nx">DecodeString</span><span class="p">(</span><span class="nx">source1</span><span class="p">)</span>
+</span><span class='line'>    <span class="nx">source2Hex</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">hex</span><span class="p">.</span><span class="nx">DecodeString</span><span class="p">(</span><span class="nx">source2</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">finalHex</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">b</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">source1Hex</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">finalHex</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">finalHex</span><span class="p">,</span> <span class="nx">b</span><span class="p">^</span><span class="nx">source2Hex</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">finalHexString</span> <span class="o">:=</span> <span class="nx">hex</span><span class="p">.</span><span class="nx">EncodeToString</span><span class="p">(</span><span class="nx">finalHex</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">finalHexString</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Running this will output the expected result, like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Pu:~ nate<span class="nv">$ </span>go run Set1Challenge2.go
+</span><span class='line'>746865206b696420646f6e277420706c6179
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+        <hr class="divider-short"/>
+
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-1-solved-in-go/" title="Previous Post: Matasano Crypto Challenges - Set 1 - Challenge 1 - Solved in Go">&laquo; Previous: Matasano Crypto Challenges - Set 1 - Challenge 1 - Solved in Go</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-3-solved-in-go/" title="Next Post: Matasano Crypto Challenges - Set 1 - Challenge 3 - Solved in Go">Next: Matasano Crypto Challenges - Set 1 - Challenge 3 - Solved in Go &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    
+    <a href="https://twitter.com/natem"><img src="/images/glyphicons_social_31_twitter.png"/></a>
+    
+
+    
+    <a href="https://github.com/NathanielMichael"><img src="/images/glyphicons_social_21_github.png"/></a>
+    
+
+    
+    <a href="https://linkedin.com/in/natemichael"><img src="/images/glyphicons_social_17_linked_in.png"/></a>
+    
+
+    
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+    
+      
+
+<script type="text/javascript">
+      var disqus_shortname = 'nateaero';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go/';
+        var disqus_url = 'http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+    
+  </body>
+</html>

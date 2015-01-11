@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Go | Nate Michael]]></title>
+  <link href="http://nathanielmichael.github.io/nate.aero/blog/categories/go/atom.xml" rel="self"/>
+  <link href="http://nathanielmichael.github.io/nate.aero/"/>
+  <updated>2015-01-11T00:01:16-08:00</updated>
+  <id>http://nathanielmichael.github.io/nate.aero/</id>
+  <author>
+    <name><![CDATA[Nate Michael]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Matasano Crypto Challenges - Set 1 - Challenge 3 - Solved in Go]]></title>
+    <link href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-3-solved-in-go/"/>
+    <updated>2015-01-10T23:43:47-08:00</updated>
+    <id>http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-3-solved-in-go</id>
+    <content type="html"><![CDATA[<p>This is the solution I came up with in Go for <strong>Set 1 / Challenge 3</strong> of the
+<a href="http://cryptopals.com">matasano crypto challenges</a>.</p>
+
+<p>This one was a little more difficult than the previous two, on the off-chance
+that you&rsquo;re reading this post shortly after it was published; I plan to come
+back tomorrow and detail my thought process / how I came to a solution so stay
+tuned for an update.</p>
+
+<p>Code after the break&hellip;</p>
+
+<!-- more -->
+
+
+<pre><code class="go">package main
+
+import hex "encoding/hex"
+import "fmt"
+import "sort"
+
+func main() {
+    sourceString := "1b37373331363f78151b7f2b783431333d78397828372d363c78373" +
+                    "e783a393b3736"
+    sourceHex, _ := hex.DecodeString(sourceString)
+
+    // This is an array of every 'character' that may be the key used to
+    // decode the source string
+    decoderArray := make([]byte, 94)
+
+    // This is the array where we'll store a 'score' for each key used
+    // in the previous array
+    scoreArray := make([]int, 94)
+    scoreMap := make(map[int]string)
+
+    for i, _ := range decoderArray {
+        finalHex := make([]byte, 0)
+
+        for _, v := range sourceHex {
+            finalHex = append(finalHex, byte(i + 32) ^ v)
+        }
+
+        finalString := string(finalHex)
+        scoreArray[i] = scoreString(finalString)
+        scoreMap[i] = finalString
+    }
+
+    sortedScoreArray := make([]int, 94)
+    copy(sortedScoreArray, scoreArray)
+
+    sort.Ints(sortedScoreArray)
+    sort.Sort(sort.Reverse(sort.IntSlice(sortedScoreArray)))
+
+    highestScore := sortedScoreArray[0]
+    var decoderIndex int
+
+    for i, v := range scoreArray {
+        if v == highestScore {
+            decoderIndex = i
+        }
+    }
+
+    fmt.Println(scoreMap[decoderIndex])
+}
+
+func scoreString(target string) int {
+    score := 0
+
+    for _, v := range target {
+
+        switch {
+        case byte(v) &lt; 0x65:
+            score = score - 1
+        }
+
+        switch string(v) {
+        case "e":
+            score = score + 5
+        case "t":
+            score = score + 5
+        case "a":
+            score = score + 4
+        case "o":
+            score = score + 4
+        case "i":
+            score = score + 4
+        }
+    }
+
+    return score
+}
+</code></pre>
+
+<p>Running this will output the expected result, like so:</p>
+
+<pre><code class="sh">Pu:~ nate$ go run Set1Challenge3.go
+Cooking MC's like a pound of bacon
+</code></pre>
+
+<p><a href="http://cryptopals.com/sets/1/challenges/3/">http://cryptopals.com/sets/1/challenges/3/</a></p>
+
+<p><a href="http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance">http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance</a></p>
+
+<p><a href="http://en.wikipedia.org/wiki/Letter_frequency">http://en.wikipedia.org/wiki/Letter_frequency</a></p>
+
+<p><a href="http://en.wikipedia.org/wiki/ASCII">http://en.wikipedia.org/wiki/ASCII</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Matasano Crypto Challenges - Set 1 - Challenge 2 - Solved in Go]]></title>
+    <link href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go/"/>
+    <updated>2015-01-10T21:25:40-08:00</updated>
+    <id>http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-2-solved-in-go</id>
+    <content type="html"><![CDATA[<p>This is the solution I came up with in Go for <strong>Set 1 / Challenge 2</strong> of the
+<a href="http://cryptopals.com">matasano crypto challenges</a>.</p>
+
+<p>Code after the break&hellip;</p>
+
+<!-- more -->
+
+
+<pre><code class="go">package main
+
+import hex "encoding/hex"
+import "fmt"
+
+func main() {
+
+    source1 := "1c0111001f010100061a024b53535009181c"
+    source2 := "686974207468652062756c6c277320657965"
+
+    source1Hex, _ := hex.DecodeString(source1)
+    source2Hex, _ := hex.DecodeString(source2)
+
+    finalHex := make([]byte, 0)
+
+    for i, b := range source1Hex {
+        finalHex = append(finalHex, b^source2Hex[i])
+    }
+
+    finalHexString := hex.EncodeToString(finalHex)
+
+    fmt.Println(finalHexString)
+}
+</code></pre>
+
+<p>Running this will output the expected result, like so:</p>
+
+<pre><code class="sh">Pu:~ nate$ go run Set1Challenge2.go 
+746865206b696420646f6e277420706c6179
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Matasano Crypto Challenges - Set 1 - Challenge 1 - Solved in Go]]></title>
+    <link href="http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-1-solved-in-go/"/>
+    <updated>2015-01-10T20:24:27-08:00</updated>
+    <id>http://nathanielmichael.github.io/nate.aero/blog/2015/01/10/matasano-crypto-challenges-set-1-challenge-1-solved-in-go</id>
+    <content type="html"><![CDATA[<p>This is the solution I came up with in Go for <strong>Set 1 / Challenge 1</strong> of the
+<a href="http://cryptopals.com">matasano crypto challenges</a>.</p>
+
+<p>Code after the break&hellip;</p>
+
+<!-- more -->
+
+
+<pre><code class="go">package main
+
+import b64 "encoding/base64"
+import hex "encoding/hex"
+import "fmt"
+
+func main() {
+    data := "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f" +
+            "69736f6e6f7573206d757368726f6f6d"
+
+    hexData, _ := hex.DecodeString(data)
+    hexEnc := b64.StdEncoding.EncodeToString(hexData)
+
+    fmt.Println(hexEnc)
+}
+</code></pre>
+
+<p>Running this will output the expected result, like so:</p>
+
+<pre><code class="sh">Pu:~ nate$ go run test.go 
+SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
