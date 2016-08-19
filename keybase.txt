@@ -1,0 +1,54 @@
+==================================================================
+https://keybase.io/nathanielmichael
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://nate.aero
+  * I am nathanielmichael (https://keybase.io/nathanielmichael) on keybase.
+  * I have a public key ASBnwhLouuk1PgAwas8T6yfn8I9acHdAm6X2v8wpR_8hMAo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "0101a39ba716c953234346f391d89cc2fc926ce3512be69c9c55a23cb8e262437fd70a",
+            "host": "keybase.io",
+            "kid": "012067c212e8bae9353e00306acf13eb27e7f08f5a7077409ba5f6bfcc2947ff21300a",
+            "uid": "530f110f4a344a008ba8a29df5404819",
+            "username": "nathanielmichael"
+        },
+        "service": {
+            "hostname": "nate.aero",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.17"
+    },
+    "ctime": 1471621280,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1471621277,
+        "hash": "384d88e9f49ae504cc9d89d1a429e5ec520632e6e8cba27c27232cc1116a34ec317eaaf4d6e194ca6892fe13c76ccb4618627d9804b6be53b71b1f2ec702c60d",
+        "seqno": 590250
+    },
+    "prev": "fc75ce77ab2ecab67c4de09a426f8ed56a16a122f3082b416089275cc4293484",
+    "seqno": 11,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgZ8IS6LrpNT4AMGrPE+sn5/CPWnB3QJul9r/MKUf/ITAKp3BheWxvYWTFAvl7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxYTM5YmE3MTZjOTUzMjM0MzQ2ZjM5MWQ4OWNjMmZjOTI2Y2UzNTEyYmU2OWM5YzU1YTIzY2I4ZTI2MjQzN2ZkNzBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwNjdjMjEyZThiYWU5MzUzZTAwMzA2YWNmMTNlYjI3ZTdmMDhmNWE3MDc3NDA5YmE1ZjZiZmNjMjk0N2ZmMjEzMDBhIiwidWlkIjoiNTMwZjExMGY0YTM0NGEwMDhiYThhMjlkZjU0MDQ4MTkiLCJ1c2VybmFtZSI6Im5hdGhhbmllbG1pY2hhZWwifSwic2VydmljZSI6eyJob3N0bmFtZSI6Im5hdGUuYWVybyIsInByb3RvY29sIjoiaHR0cDoifSwidHlwZSI6IndlYl9zZXJ2aWNlX2JpbmRpbmciLCJ2ZXJzaW9uIjoxfSwiY2xpZW50Ijp7Im5hbWUiOiJrZXliYXNlLmlvIGdvIGNsaWVudCIsInZlcnNpb24iOiIxLjAuMTcifSwiY3RpbWUiOjE0NzE2MjEyODAsImV4cGlyZV9pbiI6NTA0NTc2MDAwLCJtZXJrbGVfcm9vdCI6eyJjdGltZSI6MTQ3MTYyMTI3NywiaGFzaCI6IjM4NGQ4OGU5ZjQ5YWU1MDRjYzlkODlkMWE0MjllNWVjNTIwNjMyZTZlOGNiYTI3YzI3MjMyY2MxMTE2YTM0ZWMzMTdlYWFmNGQ2ZTE5NGNhNjg5MmZlMTNjNzZjY2I0NjE4NjI3ZDk4MDRiNmJlNTNiNzFiMWYyZWM3MDJjNjBkIiwic2Vxbm8iOjU5MDI1MH0sInByZXYiOiJmYzc1Y2U3N2FiMmVjYWI2N2M0ZGUwOWE0MjZmOGVkNTZhMTZhMTIyZjMwODJiNDE2MDg5Mjc1Y2M0MjkzNDg0Iiwic2Vxbm8iOjExLCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQPjXeGMC20gX+JjON3oGy3o1zxcZSNvN/Z04nu0qW7t0F8+4t64QPkLBd59wDYlsUnk+E0Z6ZEXXvAbx0OYdeAOoc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCC95AY3H9shzF+ZhEzT5Q5oqr8fjKx6cJrIcyj6HFB4SaN0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/nathanielmichael
+
+==================================================================
